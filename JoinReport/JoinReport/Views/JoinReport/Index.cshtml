@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Join Report</h2>
+
+<div class="dropdown" style="padding:20px">
+    <select class="form-control" id="emp_des" name="emp_des" >
+        <option value="-1">Select All</option>
+        @foreach (var item in ViewBag.Data)
+        {
+            <option value="@item["id"]">@item["designation"]</option>
+        }
+    </select>
+</div>
+
+<button class="form-control" id="toggleButton" onclick="dropdownDes()" style="height:auto; width:500px; margin-bottom:20px; ">Show Report</button>
+
+<iframe src="" id="ReportFrame" style="height:1000px; width:100%; display:none" ></iframe>
+<script>
+    function dropdownDes() {
+        var drop = $("#emp_des").val();
+
+        var objectData = {
+            dropdownDes: drop
+        }
+        $.ajax({
+            type: "POST",
+            url: "/JoinReport/drop",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(objectData),
+            success: function (response) {
+                if (response) {
+                    var ur = '../../Report/Report.aspx';
+                    //var ur =Html.
+                    $("#ReportFrame").attr("src", ur);
+                    $("#ReportFrame").show();
+                }
+
+            }
+        });
+
+    }
+</script>

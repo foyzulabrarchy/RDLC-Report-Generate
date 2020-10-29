@@ -1,0 +1,68 @@
+﻿<form>
+    <div class="form-group">
+        <label>User Name</label>
+        <input type="text" class="form-control" id="login" aria-describedby="emailHelp" placeholder="user name">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" id="pass" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="SignIn()">Login</button>
+    <p id="Login_Error"></p>
+</form>
+
+<script>
+    function SignIn() {
+        var UserID = $('#login').val(),
+            PassWord = $('#pass').val();
+
+
+        if (UserID != "" || PassWord != "") {
+            $.ajax({
+                type: "POST",
+                url: "/UserLogin/Login",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(
+                    {
+                        _UName: UserID,
+                        _Pass: PassWord
+
+                    }),
+
+                success: function (response) {
+                    if (response == true) {
+
+                        window.location.replace("/JoinReport/Index");
+                    }
+                    else {
+                        $('#Login_Error').html("Plese Give Currect UserName and Password.");                        
+                        e.preventDefault();
+                    }
+                },
+
+                failure: function (response) {
+                    $('.form-control').addClass('error');
+                    PlaySound();
+                    $('#Login_Error').html("Plese Give Currect UserName and Password.");
+                },
+                error: function (response) {
+                    $('.form-control').addClass('error');
+                    PlaySound();
+
+                    $('#Login_Error').html("Plese Give Currect UserName and Password.");
+                    toastr.error("Plese Give Currect UserName and Password.", "Error..!!", {
+                        "positionClass": "toast-top-right",
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "closeButton": true
+                    });
+                }
+            });
+        }
+        else {
+            $('#Login_Error').html("Plese Give your UserName and Password.");
+        }
+    }
+</script>
